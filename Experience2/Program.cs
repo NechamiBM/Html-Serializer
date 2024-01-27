@@ -1,6 +1,7 @@
 ﻿using Experience2;
 using System.Text.RegularExpressions;
 
+
 var html = await Load("https://learn.malkabruk.co.il/practicode/projects/pract-2/");
 html = new Regex("[\\r\\n\\t]").Replace(new Regex("\\s{2,}").Replace(html, ""), "");
 var htmlLines = new Regex("<(.*?)>").Split(html).Where(x => x.Length > 0).ToArray();
@@ -10,6 +11,9 @@ ParseHtml(root, htmlLines.Skip(2).ToList());
 
 Console.WriteLine("HTML Tree:");
 PrintHtmlTree(root, "");
+
+
+var list = root.FindElements(Selector.ParseSelectorString("nav.md-grid label.md-icon"));
 
 var htmlQuery = Selector.ParseSelectorString("nav label.md-icon #path");
 //var result = root.MatchElementToQuery(htmlQuery);
@@ -72,7 +76,7 @@ static HtmlElement CreateChild(string tagName, HtmlElement currentParent, string
 
 static void PrintHtmlTree(HtmlElement element, string indentation)
 {
-    Console.WriteLine($"{indentation}{element.Name} (ID: {element.Id})");
+    Console.WriteLine($"{indentation}{element}");
     foreach (var child in element.Children)
         PrintHtmlTree(child, indentation + "  ");
 }

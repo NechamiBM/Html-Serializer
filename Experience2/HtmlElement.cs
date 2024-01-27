@@ -18,6 +18,20 @@ namespace Experience2
         public HtmlElement Parent { get; set; }
         public List<HtmlElement> Children { get; set; } = new List<HtmlElement>();
 
+        public override string ToString()
+        {
+            string s = "";
+            if (Name != null) s += "Name: " + Name;
+            if (Id != null) s += " Id: " + Id;
+            if (Classes.Count > 0)
+            {
+                s += " classes: ";
+                foreach (var c in Classes)
+                    s += c + " ";
+            }
+            return s;
+        }
+
         public IEnumerable<HtmlElement> Descendants()
         {
             Queue<HtmlElement> queue = new Queue<HtmlElement>();
@@ -26,7 +40,8 @@ namespace Experience2
             while (queue.Count > 0)
             {
                 HtmlElement current = queue.Dequeue();
-                yield return current;
+                if (current != this)
+                    yield return current;
 
                 foreach (HtmlElement child in current.Children)
                     queue.Enqueue(child);
@@ -35,7 +50,7 @@ namespace Experience2
 
         public IEnumerable<HtmlElement> Ancestors()
         {
-            HtmlElement current = this;
+            HtmlElement current = this.Parent;
 
             while (current != null)
             {
@@ -46,34 +61,29 @@ namespace Experience2
 
         public IEnumerable<HtmlElement> FindElements(Selector selector)
         {
-            List<HtmlElement> result = new List<HtmlElement>();
-            FindElementsRecursively(this, selector, result);
+            HashSet<HtmlElement> result = new HashSet<HtmlElement>();
+            foreach (var child in this.Descendants())
+                child.FindElementsRecursively(selector, result);
             return result;
         }
 
-        private void FindElementsRecursively(HtmlElement element, Selector selector, List<HtmlElement> result)
+        private void FindElementsRecursively(Selector selector, HashSet<HtmlElement> result)
         {
-            if (!element.IsMatch(selector))
+            if (!this.IsMatch(selector))
                 return;
 
-            result.Add(element);
-
-            if (selector.Child != null)
-                foreach (var child in element.Descendants())
-                    FindElementsRecursively(child, selector.Child, result);
-
-            /*if ((query.TagName == null || descendant.Name == query.TagName)
-                && (query.Id == null || query.Id == descendant.Id)
-                && (query.Classes.All(c => descendant.Classes.Any(cr => c == cr))))
-                {
-                    if (query.Child == null)
-                        elementsMatched.Add(descendant);
-                    FindMatchElement(descendant.Descendants(), query.Child, elementsMatched);*/
+            if (selector.Child == null)
+                result.Add(this);
+            else
+                foreach (var child in this.Descendants())
+                    child.FindElementsRecursively(selector.Child, result);
         }
 
         private bool IsMatch(Selector selector)
         {
-            throw new NotImplementedException();
+            return (selector.TagName == null || Name.Equals(selector.TagName))
+                && (selector.Id == null || selector.Id.Equals(Id).Equals(Id)
+                && (selector.Classes.Intersect(Classes).Count() == selector.Classes.Count));
         }
     }
 }

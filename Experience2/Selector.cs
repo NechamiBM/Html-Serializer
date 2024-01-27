@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Experience2
 {
@@ -15,6 +16,19 @@ namespace Experience2
         public Selector Parent { get; set; }
         public Selector Child { get; set; }
 
+        public override string ToString()
+        {
+            string s = "";
+            if (TagName != null) s += "Name: " + TagName;
+            if (Id != null) s += " Id: " + Id;
+            if (Classes.Count > 0)
+            {
+                s += " classes: ";
+                foreach (var c in Classes)
+                    s += c + " ";
+            }
+            return s;
+        }
         public static Selector ParseSelectorString(string selectorString)
         {
             Selector rootSelector = new Selector();
