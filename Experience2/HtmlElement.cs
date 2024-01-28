@@ -40,7 +40,7 @@ namespace Experience2
             while (queue.Count > 0)
             {
                 HtmlElement current = queue.Dequeue();
-                if (current != this)
+                if (this != current)
                     yield return current;
 
                 foreach (HtmlElement child in current.Children)
@@ -62,6 +62,10 @@ namespace Experience2
         public IEnumerable<HtmlElement> FindElements(Selector selector)
         {
             HashSet<HtmlElement> result = new HashSet<HtmlElement>();
+
+            //while (selector.Child != null)
+            //    selector = selector.Child;
+
             foreach (var child in this.Descendants())
                 child.FindElementsRecursively(selector, result);
             return result;
@@ -69,20 +73,21 @@ namespace Experience2
 
         private void FindElementsRecursively(Selector selector, HashSet<HtmlElement> result)
         {
-            if (!this.IsMatch(selector))
+            if (!IsMatch(selector))
                 return;
 
             if (selector.Child == null)
                 result.Add(this);
             else
-                foreach (var child in this.Descendants())
+                foreach (var child in Descendants())
                     child.FindElementsRecursively(selector.Child, result);
         }
 
         private bool IsMatch(Selector selector)
         {
-            return (selector.TagName == null || Name.Equals(selector.TagName))
-                && (selector.Id == null || selector.Id.Equals(Id).Equals(Id)
+            var x = selector.Classes.Intersect(Classes).Count();
+            return ((selector.TagName == null || Name.Equals(selector.TagName))
+                && (selector.Id == null || selector.Id.Equals(Id))
                 && (selector.Classes.Intersect(Classes).Count() == selector.Classes.Count));
         }
     }

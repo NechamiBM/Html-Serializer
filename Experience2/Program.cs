@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 
 
-var html = await Load("https://learn.malkabruk.co.il/practicode/projects/pract-2/");
+var html = await Load("https://mail.google.com/mail/u/0/#inbox");
 html = new Regex("[\\r\\n\\t]").Replace(new Regex("\\s{2,}").Replace(html, ""), "");
 var htmlLines = new Regex("<(.*?)>").Split(html).Where(x => x.Length > 0).ToArray();
 
@@ -13,10 +13,7 @@ Console.WriteLine("HTML Tree:");
 PrintHtmlTree(root, "");
 
 
-var list = root.FindElements(Selector.ParseSelectorString("nav.md-grid label.md-icon"));
-
-var htmlQuery = Selector.ParseSelectorString("nav label.md-icon #path");
-//var result = root.MatchElementToQuery(htmlQuery);
+var list = root.FindElements(Selector.ParseSelectorString("form div div.YhhY8"));
 
 
 async Task<string> Load(string url) => await (await (new HttpClient()).GetAsync(url)).Content.ReadAsStringAsync();
