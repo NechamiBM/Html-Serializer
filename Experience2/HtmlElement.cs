@@ -50,7 +50,7 @@ namespace Experience2
 
         public IEnumerable<HtmlElement> Ancestors()
         {
-            HtmlElement current = this.Parent;
+            HtmlElement current = Parent;
 
             while (current != null)
             {
@@ -63,7 +63,7 @@ namespace Experience2
         {
             HashSet<HtmlElement> result = new HashSet<HtmlElement>();
 
-            foreach (var child in this.Descendants())
+            foreach (var child in Descendants())
                 child.FindElementsRecursively(selector, result);
             return result;
         }

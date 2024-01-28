@@ -29,6 +29,7 @@ namespace Experience2
             }
             return s;
         }
+
         public static Selector ParseSelectorString(string selectorString)
         {
             Selector rootSelector = new Selector();
