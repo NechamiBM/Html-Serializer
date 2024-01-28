@@ -25,7 +25,7 @@ namespace Experience2
             if (Id != null) s += " Id: " + Id;
             if (Classes.Count > 0)
             {
-                s += " classes: ";
+                s += " Classes: ";
                 foreach (var c in Classes)
                     s += c + " ";
             }

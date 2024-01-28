@@ -12,7 +12,6 @@ ParseHtml(root, htmlLines.Skip(2).ToList());
 Console.WriteLine("HTML Tree:");
 PrintHtmlTree(root, "");
 
-
 var list = root.FindElements(Selector.ParseSelectorString("form div div.YhhY8"));
 
 
