@@ -63,9 +63,6 @@ namespace Experience2
         {
             HashSet<HtmlElement> result = new HashSet<HtmlElement>();
 
-            //while (selector.Child != null)
-            //    selector = selector.Child;
-
             foreach (var child in this.Descendants())
                 child.FindElementsRecursively(selector, result);
             return result;
@@ -85,7 +82,6 @@ namespace Experience2
 
         private bool IsMatch(Selector selector)
         {
-            var x = selector.Classes.Intersect(Classes).Count();
             return ((selector.TagName == null || Name.Equals(selector.TagName))
                 && (selector.Id == null || selector.Id.Equals(Id))
                 && (selector.Classes.Intersect(Classes).Count() == selector.Classes.Count));
